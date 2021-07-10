@@ -34,6 +34,14 @@ grant_type=password
 &username=joeb
 &password=secret
 
+###
+
+# get user profile data
+GET http://localhost:8000/users/me
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
 
 
 # protected, secure endpoints

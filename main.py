@@ -177,7 +177,7 @@ def get_paysources(account_id: str, token: UserInDB = Depends(auth.get_current_a
 
 @app.get("/users/me")
 def read_users_me(current_user: User = Depends(auth.get_current_active_user)):
-    return current_user
+    return { "username": current_user.username, "email": current_user.email, "full_name": current_user.full_name, "disabled": current_user.disabled }
 
 
 @app.get("/users/exists/{username}")
