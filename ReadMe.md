@@ -16,33 +16,39 @@ The solution explores the use of Docker, MongoDB, JWTs, and is a reference proje
 
 Docker - the database cluster runs locally using Bitnami docker images and allows local development making use of MongoDB transaction support which requires a clustered deployment.
 
-## Build
+## Getting started
 
-    docker image build -t stevebate/devrepo/nvelopes:v1 .
-
-## Run
-
-create a shared network:
+Clone the project and create a shared network:
 
     docker network create -d bridge nvelopes-network
 
-Regardless of how the application is executed you need a database. In the containers/mongo directory bring up the mongo cluster via **docker-compose up -d** or in VS Code use the docker extension, right-click the docker-compose.yml file and select **Compose Up**.
+Before the application is executed you need a database. In the containers/mongo directory bring up the mongo cluster via **docker-compose up -d** or in VS Code use the docker extension, right-click the on the mongo docker-compose.yml file and select **Compose Up**.
 
-One the database is up and running launch the application from the commandline (this will pick up the DB connection string from the .env file):
+One the database is up and running you can run the application locally by launching the application from the commandline. This will pick up the DB connection string from the .env file:
 
     uvicorn main:app --reload
 
-or run via the docker file (explicityl setting the connection string environment variable):
+Alternatively, build the docker image:
+
+    docker image build -t stevebate/devrepo/nvelopes:v1 .
+
+and run as a container explicitly setting the connection string environment variable:
 
     docker run -p 8000:8000 --network="nvelopes-network" -e DB_CONNECTION_STRING='mongodb://dbUser1:dbPassword1@mongo1:27017,mongo2:27017,mongo3:27017/nvelopes?authSource=nvelopes&replicaSet=rs0&readPreference=primary&ssl=false' stevebate/devrepo/nvelopes:v1
 
-The application has it's own docker compose file. To bring up the entire application including creating the networ, launching the mongodatabase cluster, and executing the included unit tests, use the shell script file for convenience:
+To co-ordinate all the moving parts and bring up the entire application including creating the network and launching the mongo database cluster, use the shell script file for convenience:
 
     ./system-up.sh
 
-Likewise, to cleanly bring them all and dispose the network
+Likewise, to cleanly bring them all down and dispose the network:
 
     ./system-down.sh
+
+## Tests
+
+To run the domain model unit tests:
+
+    python -m unittest tests.account_tests
 
 ## Usage
 
