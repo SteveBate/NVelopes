@@ -2,7 +2,7 @@
 
 ## What is it?
 
-A playground/prototype API for a hypothetical SaaS implementation of a budgeting system that your gran and grandad probably used before there were such things as computers whereby they would partition their income into envelopes and write on each envelope what the cash was for i.e which bills to pay. This allows for a nice, visually simple overview of how your money is allocated so you don't overspend and is far les complicated than the traditional accounting/budgeting systems that most people are familiar with.
+A playground/prototype API for a hypothetical SaaS implementation of a budgeting system that your gran and grandad probably used before there were such things as computers whereby they would partition their income into envelopes and write on each envelope what the cash was for i.e which bills to pay. This allows for a nice, visually simple overview of how your money is allocated so you don't overspend and is far less complicated than the traditional accounting/budgeting systems that most people are familiar with.
 
 The solution explores the use of Docker, MongoDB, JWTs, and is a reference project (for me) for how an application/service might be built this way in Python.
 
