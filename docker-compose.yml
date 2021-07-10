@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  nvelopes:
+    image: stevebate/devrepo/nvelopes:v1
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 8000:8000
+    environment:
+      - DB_CONNECTION_STRING=mongodb://dbUser1:dbPassword1@mongo1:27017,mongo2:27017,mongo3:27017/nvelopes?authSource=nvelopes&replicaSet=rs0&readPreference=primary&ssl=false
+
+networks:
+  default:
+    external:
+      name: nvelopes-network

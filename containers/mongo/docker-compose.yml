@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  mongo1:
+    hostname: mongo1
+    container_name: mongo-primary
+    image: bitnami/mongodb
+    expose:
+    - 27017
+    volumes:
+      # - ./database1:/data/db
+      - mongodata:/data/db
+    ports:
+      - 127.0.0.1:27011:27017
+    environment: 
+      - MONGODB_REPLICA_SET_MODE=primary
+      - MONGODB_ADVERTISED_HOSTNAME=mongo1
+      - MONGODB_ROOT_PASSWORD=password123
+      - MONGODB_ROOT_USERNAME=root123
+      - MONGODB_REPLICA_SET_KEY=abc123
+      - MONGODB_REPLICA_SET_NAME=rs0
+      - MONGODB_DATABASE=nvelopes
+      - MONGODB_USERNAME=dbUser1
+      - MONGODB_PASSWORD=dbPassword1
+    restart: always
+
+  mongo2:
+    hostname: mongo2
+    container_name: mongo-secondary
+    image: bitnami/mongodb
+    expose:
+    - 27017
+    volumes:
+      # - ./database2:/data/db
+      - mongodata:/data/db
+    depends_on:
+      - mongo1      
+    ports:
+    - 127.0.0.1:27012:27017
+    environment: 
+      - MONGODB_REPLICA_SET_MODE=secondary
+      - MONGODB_ADVERTISED_HOSTNAME=mongo2    
+      - MONGODB_PRIMARY_HOST=mongo1
+      - MONGODB_PRIMARY_PORT_NUMBER=27011
+      - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=password123
+      - MONGODB_REPLICA_SET_KEY=abc123
+    restart: always
+
+  mongo3:
+    hostname: mongo3
+    container_name: mongo-arbiter
+    image: bitnami/mongodb
+    expose:
+    - 27017
+    volumes:
+      # - ./database3:/data/db
+      - mongodata:/data/db
+    depends_on:
+      - mongo1      
+    ports:
+    - 127.0.0.1:27013:27017
+    environment:
+      - MONGODB_REPLICA_SET_MODE=arbiter
+      - MONGODB_ADVERTISED_HOSTNAME=mongo3    
+      - MONGODB_PRIMARY_HOST=mongo1
+      - MONGODB_PRIMARY_PORT_NUMBER=27011
+      - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=password123
+      - MONGODB_REPLICA_SET_KEY=abc123
+    restart: always
+
+networks:
+  default:
+    external:
+      name: nvelopes-network
+
+volumes:
+  mongodata:

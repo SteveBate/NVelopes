@@ -1,0 +1,326 @@
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2ViIiwiZXhwIjoxNjI1OTI1ODE1fQ.d0xlLmiA333eBTmhZsJdqUaiIBI2iFaQDAIdVnoatEY
+
+# unprotected, anonymous endpoints
+
+###
+
+# check a user exists
+GET http://localhost:8000/users/exists/joeb
+Accept: application/json
+
+
+###
+
+# allow a user to create an account
+POST http://localhost:8000/users/signup
+Content-Type: application/json
+Accept: application/json
+
+{
+    "full_name": "Joe Bloggs",
+    "username": "joeb",
+    "email": "joebloggs@somewhere.com",
+    "password": "secret"
+}
+
+###
+
+# login to get token
+POST http://127.0.01:8000/token HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
+
+grant_type=password
+&username=joeb
+&password=secret
+
+
+
+# protected, secure endpoints
+
+###
+
+# create a new account
+# NOTE - the returned account id must be copied and then pasted into the account_id field of the following requests
+POST http://localhost:8000/accounts/new
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "BanksRUs Current Account",
+    "opening_balance": 100.00,
+    "can_go_negative": false
+}
+
+###
+
+# add envelopes to an account
+POST http://localhost:8000/accounts/envelopes/add
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "account_id": "60e9a6037d39bb9f6b3f6015",
+    "envelopes": ["Shopping", "Mortgage", "Loans", "Car"]
+}
+
+###
+
+# add single envelope to an account
+POST http://localhost:8000/accounts/envelopes/addsingle
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "account_id": "60e9a6037d39bb9f6b3f6015",
+    "envelope": "Holiday Fund"
+}
+
+###
+
+# rename the holiday fund envelope
+POST http://localhost:8000/accounts/envelopes/rename
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "account_id": "60e9a6037d39bb9f6b3f6015",
+    "envelope_id": 5,
+    "new_name": "Savings"
+}
+
+###
+
+# move money from the available envelope to the shopping envelope
+POST http://localhost:8000/accounts/movemoney
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "account_id": "60e9a6037d39bb9f6b3f6015",
+    "from_id": 0,
+    "to_id": 4,
+    "description": "need some cash for the car",
+    "amount": 60.00
+}
+
+###
+
+# deposit some money into an envelope
+POST http://localhost:8000/accounts/deposit
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "account_id": "60e9a6037d39bb9f6b3f6015",
+    "envelope_id": 1,
+    "description": "for shopping",
+    "amount": 500.00
+}
+
+###
+
+# debit some money from an envelope
+POST http://localhost:8000/accounts/debit
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "account_id": "60e9a6037d39bb9f6b3f6015",
+    "envelope_id": 4,
+    "description": "MOT",
+    "amount": 55.00
+}
+
+###
+
+# add a payment source to an account
+POST http://localhost:8000/accounts/payers/add
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "account_id": "60e9a6037d39bb9f6b3f6015",
+    "payer": "Umbrella Corporation",
+    "amount": 2000.00,
+    "payments": [
+        {
+            "envelope_id" :1,
+            "amount": 800
+        }, {
+            "envelope_id" :2, 
+            "amount": 750
+        }, {
+            "envelope_id" :3, 
+            "amount": 200
+        }, {
+            "envelope_id" :4, 
+            "amount": 200
+        }
+    ]
+}
+
+###
+
+# add a second payment source to an account
+POST http://localhost:8000/accounts/payers/add
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "account_id": "60e9a6037d39bb9f6b3f6015",
+    "payer": "Massive Dynamic",
+    "amount": 1000.00,
+    "payments": [
+    ]
+}
+
+###
+
+# update a payment source on an account
+POST http://localhost:8000/accounts/payers/update
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "account_id": "60e9a6037d39bb9f6b3f6015",
+    "payment_source_id": 0,
+    "payer": "Umbrella Corporation",
+    "amount": 2025.00,
+    "payments": [
+        {
+            "envelope_id" :1,
+            "amount": 800
+        }, {
+            "envelope_id" :2, 
+            "amount": 750
+        }, {
+            "envelope_id" :3, 
+            "amount": 200
+        }, {
+            "envelope_id" :4, 
+            "amount": 100
+        }, {
+            "envelope_id" :5, 
+            "amount": 150
+        }
+    ]
+}
+
+
+
+###
+
+# pay day! - company 1
+POST http://localhost:8000/accounts/pay
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "account_id": "60e9a6037d39bb9f6b3f6015",
+    "payment_source_id": 0,
+    "payer": "Umbrella Corporation",
+    "amount": 2105.00,
+    "description": "Pay day!",
+    "payments": [
+        {
+            "envelope_id" :1,
+            "amount": 800
+        }, {
+            "envelope_id" :2, 
+            "amount": 750
+        }, {
+            "envelope_id" :3, 
+            "amount": 200
+        }, {
+            "envelope_id" :4, 
+            "amount": 100
+        }, {
+            "envelope_id" :5, 
+            "amount": 100
+        }
+    ]
+}
+
+###
+
+# pay day! - company 2
+POST http://localhost:8000/accounts/pay
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "account_id": "60e9a6037d39bb9f6b3f6015",
+    "payment_source_id": 1,
+    "payer": "Massive Dyanmic",
+    "amount": 1000.00,
+    "description": "Pay day 2!",
+    "payments": [
+    ]
+}
+
+###
+
+# rename the overflow envelope
+POST http://localhost:8000/accounts/envelopes/rename
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "account_id": "60e9a6037d39bb9f6b3f6015",
+    "envelope_id": 0,
+    "new_name": "Spare"
+}
+
+###
+
+# undo the last transaction
+POST http://localhost:8000/accounts/transactions/undo
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "account_id": "60e9a6037d39bb9f6b3f6015"
+}
+
+###
+
+# retrieve account
+GET http://localhost:8000/accounts/60e9a6037d39bb9f6b3f6015
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+
+# retrieve account envelopes
+GET http://localhost:8000/accounts/60e9a6037d39bb9f6b3f6015/envelopes/list
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+
+# retrieve account paysources
+GET http://localhost:8000/accounts/60e9a6037d39bb9f6b3f6015/paysources/list
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+
+# retrieve account transactions
+GET http://localhost:8000/accounts/60e9a6037d39bb9f6b3f6015/transactions/0/5
+Accept: application/json
+Authorization: Bearer {{token}}
