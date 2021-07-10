@@ -12,10 +12,6 @@ sleep 3 # seconds
 # move to root
 cd ../..
 
-# run the unit and integration tests
-echo "running tests..."
-python -m unittest tests.account_tests
-
 # bring up the app containers
 echo "starting the app containers"
 docker-compose up -d
