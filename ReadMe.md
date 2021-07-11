@@ -24,7 +24,7 @@ Clone the project and create a shared network:
 
 Before the application is executed you need a database. In the containers/mongo directory bring up the mongo cluster via **docker-compose up -d** or in VS Code use the docker extension, right-click the on the mongo docker-compose.yml file and select **Compose Up**.
 
-One the database is up and running you can run the application locally by launching the application from the commandline. This will pick up the DB connection string from the .env file:
+Once the database is up and running you can run the application locally by launching the application from the commandline. This will pick up the DB connection string from the .env file:
 
     uvicorn main:app --reload
 
@@ -37,7 +37,7 @@ and run as a container explicitly setting the various environment variables (see
     docker run -p 8000:8000 --network="nvelopes-network" -e DB_CONNECTION_STRING='...' JWT_SECRET_KEY='...' JWT_ALGORITHM='...' JWT_EXPIRES='...' stevebate/devrepo/nvelopes:v1
 
 
-However, rather then use **docker run** use the included shell script for convenience:
+However, rather than use **docker run** use the included shell script for convenience:
 
     ./system-up.sh
 
@@ -55,7 +55,7 @@ To run the domain model unit tests:
 
 ## Usage
 
-Once up and running, head to local **http://localhost:8000/docs#/** to see the generate OpenAPI documentation. From here you can exercise the API by creating an account and logging in via the Authorize button which will ensure the JWT token is automatically sent to every protected URI thereafter. Creating an account will return an account id which you can then use as part of the request to all other endpoints.
+Once up and running, head to **http://localhost:8000/docs#/** to see the generated OpenAPI documentation. From here you can exercise the API by creating an account and logging in via the Authorize button which will ensure the JWT token is automatically sent to every protected URI thereafter. Creating an account will return an account id which you can then use as part of the request to all other endpoints.
 
 
 Alternatively, the enpoints can also be exercised via an included **requests.http** file which can be executed in VS Code via the REST Client extension. This requires a bit more involvement i.e. copying and pasting of values. For example, once you login you need to copy the returned JTW token to the variable **@token** declared at the top of the file. This is referenced in other protected endoints via the Authorization header. Also, creating an account requires that the returned **account_id** value is copied to those requests that require the account id to be passed.
@@ -68,7 +68,7 @@ This is an example domain, not a complete application. The secrets stored within
 
 ### Functionality
 
-A personal budgeting application needs to allow mistakes to be corrected. Unlike an actual bank account where the transactions are append-only, and any errors are made good via a new compensating transaction issued by the bank, this application allows transaction to be undone so the user can correct mistakes as they make entries into their budegting envelopes. There is no limit to this **undo** functionality except for the fact that very first transaction i.e opening the account, cannot be undone.
+A personal budgeting application needs to allow mistakes to be corrected. Unlike an actual bank account where the transactions are append-only, and any errors are made good via a new compensating transaction issued by the bank, this application allows transactions to be undone so the user can correct mistakes as they make entries into their budegting envelopes. There is no limit to this **undo** functionality except for the fact that very first transaction i.e opening the account, cannot be undone.
 
 ### Schema Design
 
@@ -76,6 +76,6 @@ MongoDB is often described as schema-less but that's not strictly true. You stil
 
 An order in an e-commerce application is likely to be short lived and will have not so many line items. In this case it is reasonable to model the schema with the line items embedded in the order and save on a join at query time. It's also highly likely that you would always want to see the line items and order header at the same time which again points to having the line items embedded in the order.
 
-On the other hand, a bank account is a very long lived entity. People rarely change banks, and the number of transactions (line items) associated with an account could number in the millions over the course of a persons life. This makes embedding the transactions inside the account a non-starter as the hit on performance would grow massively overtime. It would also eventually most likely hit the MongoDB document size limit of 16MB which again, when you think about it, makes the idea of embedding the transactions in the account document seem ludicrous. Finally, a user doesn't always want to see their transactions when viewing a bank account, and certainly not all of them, so when there is a need to view data independently, that too points to having separate collections for the data even if logically an account and its transactions are in DDD terms, an **Aggregate**, and with MongoDB's recent support for multi-document transactions there's nothing stopping you from updating an account and its transactions atomically as an Aggregate requires.
+On the other hand, a bank account is a very long lived entity. People rarely change banks, and the number of transactions (line items) associated with an account could number in the millions over the course of a person's life. This makes embedding the transactions inside the account a non-starter as the hit on performance would grow massively overtime. It would also eventually most likely hit the MongoDB document size limit of 16MB which again, when you think about it, makes the idea of embedding the transactions in the account document seem ludicrous. Finally, a user doesn't always want to see their transactions when viewing a bank account, and certainly not all of them, so when there is a need to view data independently, that too points to having separate collections for the data even if logically an account and its transactions are in DDD terms, an **Aggregate**, and with MongoDB's recent support for multi-document transactions there's nothing stopping you from updating an account and its transactions atomically as an Aggregate requires.
 
 This application has collections for users, accounts, and transactions. The *transactions* endpoint allows paging to reduce the number of returned records for any given request.
