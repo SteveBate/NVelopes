@@ -10,7 +10,9 @@ services:
       - 8000:8000
     environment:
       - DB_CONNECTION_STRING=mongodb://dbUser1:dbPassword1@mongo1:27017,mongo2:27017,mongo3:27017/nvelopes?authSource=nvelopes&replicaSet=rs0&readPreference=primary&ssl=false
-
+      - JWT_SECRET_KEY=0c8eaab3eba38db00e17358b08dd28425b14561f2ec174a4b75ee3c566e92e15
+      - JWT_ALGORITHM=HS256
+      - JWT_EXPIRES=30 # minutes
 networks:
   default:
     external:
