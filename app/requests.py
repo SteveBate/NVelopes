@@ -44,12 +44,6 @@ class DebitMoneyRequest(BaseModel):
     description: str
     amount: float    
 
-class CorrectionRequest(BaseModel):
-    account_id: str
-    tx_id: int
-    description: str
-    amount: float
-
 class PaymentSourceRequest(BaseModel):
     envelope_id: int
     amount: float

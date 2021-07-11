@@ -7,7 +7,7 @@ from datetime import timedelta
 from fastapi import Depends, HTTPException, FastAPI, status
 from fastapi.security import OAuth2PasswordRequestForm
 from app.requests import NewUserRequest, NewAccountRequest, AddEnvelopesRequest, AddEnvelopeRequest, MoveMoneyRequest, DepositMoneyRequest, DebitMoneyRequest
-from app.requests import CorrectionRequest, AddPaymentSourceRequest, UpdatePaymentSourceRequest, PayRequest, RenameEnvelopesRequest, UndoRequest
+from app.requests import AddPaymentSourceRequest, UpdatePaymentSourceRequest, PayRequest, RenameEnvelopesRequest, UndoRequest
 from app.models import Token, User, UserInDB
 from app.db import db
 from domain.account import Account

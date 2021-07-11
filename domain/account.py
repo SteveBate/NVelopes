@@ -148,42 +148,7 @@ class Account:
             self.__last_tx_id = self.__last_tx_id - 1
             return self.__envelopes
 
-    # allow a correction to the transaction by its id
-    # def correct(self, tx: Transaction, new_amount) -> None:
-    #     envelope = self.__envelopes[tx.envelope_id_src]
-    #     oldValue = tx.amount
-    #     newValue = -new_amount if tx.operation == "DEBIT" else new_amount        
-    #     if tx.operation == "DEBIT":            
-    #         envelope.correct((envelope.balance + abs(oldValue)) + newValue)
-        # else:
-        #     envelope.correct((envelope.balance - abs(oldValue)) + newValue)
 
-    # def correct(self, tx_id, description, amount) -> None:
-    #     tx = self.__transactions[tx_id]
-    #     envelope = self.__envelopes[tx.envelope_id_src]        
-    #     oldValue = tx.amount
-    #     newValue = -amount if tx.operation == "DEBIT" else amount
-    #     self.__transactions[tx_id].correct(description, newValue)
-    #     if tx.operation == "DEBIT":
-    #         envelope.correct((envelope.balance + abs(oldValue)) + newValue)
-    #     else:
-    #         envelope.correct((envelope.balance - abs(oldValue)) + newValue)
-        
-
-
-    # # redo the last undo transaction
-    # def redo(self) -> None:
-    #     if self.__undos.__len__ == 0: return
-    #     tx = self.__undos.pop()
-    #     self.__transactions.append(tx)
-    #     if tx.operation == "MOVE":
-    #         self.__envelopes[tx.envelope_id_src].update(-tx.amount)
-    #         self.__envelopes[tx.envelope_id_dest].update(tx.amount)
-    #     else:
-    #         self.__envelopes[tx.envelope_id_src].update(tx.amount)
-    #         self.__undos.append(tx)
-
-    # 
     def envelope_exists(self, envelope_name):
         return bool([e for e in self.__envelopes if (e.name == envelope_name)])
 
@@ -209,23 +174,6 @@ class Account:
         print("")
         print("")
 
-
-    # print statement
-    # def print_history(self) -> None:
-    #     total = 0
-    #     for tx in self.__transactions:
-    #         total += tx.amount if tx.operation != "MOVE" else 0
-    #         print(f"{tx.to_string()} {total:7.2f}")
-    #     print(f"************************************************************************************************************************************************")
-    #     print(f"{'':15} {'':97} {self.__name:<48} {self.balance:7.2f}")
-    #     print("")
-    #     print("")
-
-    # def print_transactions(self):
-    #     txs = []
-    #     for tx in self.__transactions:
-    #         txs.append(tx.to_string())
-    #     return txs
 
     # generate the next transaction id
     def __inc_tx_id(self) -> int:

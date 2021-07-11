@@ -224,32 +224,6 @@ class AccountTestFixture(unittest.TestCase):
         self.assertEqual("Cannot withdraw more than is available in 'Available' when account is not allowed to go negative", str(ctx.exception))
 
 
-    # def test_account_can_correct_debit_transaction(self):
-    #     # given
-    #     acc = Account("12345", "MyBankName")
-    #     acc.open("ABC1", "12345", 100.00)
-    #     acc.debit(0, "paying out", 10.00)
-    #     # when
-    #     acc.correct(1, "paying out", 11.00)
-    #     # then
-    #     self.assertEqual(89.00, round(acc.amount_in_envelope(0),2))
-    #     self.assertEqual(89.00, round(acc.balance, 2))
-    #     self.assertIn("DEBIT                paying out                                         Available                                 -11.00", acc.last_tx.to_string())
-
-
-    # def test_account_can_correct_deposit_transaction(self):
-    #     # given
-    #     acc = Account("12345", "MyBankName")
-    #     acc.open("ABC1", "12345", 100.00)
-    #     acc.deposit(0, "paying in", 10.00)
-    #     # when
-    #     acc.correct(1, "paying in", 11.00)
-    #     # then
-    #     self.assertEqual(111.00, round(acc.amount_in_envelope(0),2))
-    #     self.assertEqual(111.00, round(acc.balance, 2))
-    #     self.assertIn("DEPOSIT              paying in                                          Available                                  11.00", acc.last_tx.to_string())
-
-
     def test_account_can_debit_amount_from_envelope_then_undo(self):
         # given
         acc = Account("12345", "MyBankName")
@@ -287,34 +261,6 @@ class AccountTestFixture(unittest.TestCase):
         self.assertEqual(100.00, acc.amount_in_envelope(0))
         self.assertEqual(0, acc.amount_in_envelope(1))
 
-    # def test_account_can_pay_envelopes_then_undo(self):
-    #     # given
-    #     acc = Account("12345", "MyBankName")
-    #     acc.open("ABC1", "12345", 0.00)
-    #     acc.add_envelopes([Envelope(1, "Shopping", 0), Envelope(2, "Savings", 0)])
-    #     payment_source = PaymentSource(0, "ACME Ltd.", 300.00, [PaymentSourceEnvelope(1, 100.00), PaymentSourceEnvelope(2, 100.00)])
-    #     acc.pay("Pay day!", payment_source)
-    #     # when
-    #     acc.undo(acc.last_tx)
-    #     # then
-    #     self.assertEqual(0.00, acc.amount_in_envelope(0))
-    #     self.assertEqual(0.00, acc.amount_in_envelope(1))
-    #     self.assertEqual(0.00, acc.amount_in_envelope(2))         
-
-
-    # def test_account_can_debit_amount_from_envelope_then_undo_then_redo(self):
-    #     # given
-    #     acc = Account("12345", "MyBankName")
-    #     acc.open("ABC1", "12345", 100.00)
-    #     acc.add_envelopes([Envelope(1, "Shopping", 0)])
-    #     acc.debit(0, "paid bills", 100.00)
-    #     acc.undo()
-    #     # when
-    #     acc.redo()
-    #     # then
-    #     self.assertEqual(0.00, acc.amount_in_envelope(0))
-    #     self.assertEqual(0.00, acc.balance)
-    #     self.assertIn("DEBIT                paid bills                                         Available                                -100.00", acc.last_tx.to_string())
 
     def test_account_can_specify_payment_source_and_amounts_to_pay_into_each_envelope(self):
         # given

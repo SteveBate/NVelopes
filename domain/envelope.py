@@ -19,9 +19,6 @@ class Envelope:
     def balance(self):
         return self.__balance
 
-    def correct(self, value):
-        self.__balance = value
-
     def update(self, value):
         self.__balance += value
 
