@@ -153,7 +153,7 @@ class Db:
                 return result1.modified_count == 1 and result2.acknowledged
 
 
-    def save_all_envelopes_after_undo(self, account: Account, envelopes: List[Envelope]):
+    def save_all_changes_after_undo(self, account: Account, envelopes: List[Envelope]):
         from bson.objectid import ObjectId
         # wrap two updates in an auto-commited transaction (auto-rollback on error)
         with myclient.start_session() as session:

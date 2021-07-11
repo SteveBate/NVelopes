@@ -120,7 +120,7 @@ class Account:
 
 
     # undo the last transaction
-    def undo(self, tx: Transaction) -> None:
+    def undo(self, tx: Transaction) -> List[Envelope]:
         if tx.operation == "MOVE":
             self.__envelopes[tx.envelope_id_src].update(tx.amount)
             self.__envelopes[tx.envelope_id_dest].update(-tx.amount)

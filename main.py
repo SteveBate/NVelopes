@@ -136,7 +136,7 @@ def undo(req: UndoRequest, token: UserInDB = Depends(auth.get_current_active_use
     acc = Account.from_doc(db.get_account(token.user_id, req.account_id))
     try:
         envelopes = acc.undo(tx)
-        return db.save_all_envelopes_after_undo(acc, envelopes)
+        return db.save_all_changes_after_undo(acc, envelopes)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
