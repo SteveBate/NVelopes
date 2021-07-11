@@ -130,7 +130,7 @@ def add_payment_source_to_account(req: PayRequest, token: UserInDB = Depends(aut
 @app.post("/accounts/transactions/undo")
 def undo(req: UndoRequest, token: UserInDB = Depends(auth.get_current_active_user)):
     doc = db.get_last_transaction(token.user_id, req.account_id)
-    if not doc: raise HTTPException(status_code=404, detail="Account not found")
+    if not doc: raise HTTPException(status_code=404, detail="Transaction not found")
     tx = Transaction.from_doc(doc)
     if tx.id == 0: raise HTTPException(status_code=400, detail="Cannot undo opening transaction. Delete the account instead.")
     acc = Account.from_doc(db.get_account(token.user_id, req.account_id))
