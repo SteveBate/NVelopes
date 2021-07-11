@@ -140,12 +140,20 @@ class Account:
             self.__last_tx_id = self.__last_tx_id - 1
             return self.__envelopes
         if tx.operation == "PAY":
+            # undo the account balance
             self.__balance = self.__balance - tx.amount
+            # undo each envelope
             pse = [PaymentSourceEnvelope.from_doc(pe) for pe in tx.pay_envelopes]
             for pe in pse:
                 self.__envelopes[pe.id].update(-pe.amount)
+            # whatever remainder was pushed into the overflow envelope needs to be undone too
+            total = sum(p.amount for p in pse)
+            diff = tx.amount -total
+            self.__envelopes[self.__OVERFLOW_ENVELOPE_ID].update(-diff)
+            # set the transaction state for the account
             self.__last_tx = None
             self.__last_tx_id = self.__last_tx_id - 1
+            # return changes
             return self.__envelopes
 
 
