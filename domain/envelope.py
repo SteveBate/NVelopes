@@ -33,7 +33,7 @@ class Envelope:
         return {
             "id" : self.__id,
             "name": self.__name,
-            "balance": self.__balance
+            "balance": round(self.__balance, 2)
         }
 
     # convert from json to Envelope
